@@ -9,10 +9,10 @@ const PollPage = ({ questions, users, dispatch, authedUser }) => {
     (question) => question.id === id
   );
   let initialOption;
-  if (question.optionOne.votes.includes(authedUser.id)) {
+  if (question && question.optionOne.votes.includes(authedUser.id)) {
     initialOption = "optionOne";
   }
-  if (question.optionTwo.votes.includes(authedUser.id)) {
+  if (question && question.optionTwo.votes.includes(authedUser.id)) {
     initialOption = "optionTwo";
   }
   const [optionSelected, setOptionSelected] = useState(initialOption);
