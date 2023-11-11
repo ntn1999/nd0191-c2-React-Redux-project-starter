@@ -25,7 +25,6 @@ const LoginRoute = ({ children, authedUser }) => {
 const App = (props) => {
   const { authedUser } = props;
   const location = useLocation();
-  console.log(location.pathname, "aaaaaaaaaaaaa");
 
   useEffect(() => {
     props.dispatch(handleInitialData());
