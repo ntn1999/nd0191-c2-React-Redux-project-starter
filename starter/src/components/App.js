@@ -9,19 +9,24 @@ import PollPage from "./PollPage";
 import PollCreation from "./PollCreation";
 import Navbar from "./Navbar";
 import { Routes, Route } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import "../css/App.css";
 import PageNotFound from "./PageNotFound";
 
+const LoginRoute = ({ children, authedUser }) => {
+  const location = useLocation();
+  if (!authedUser) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  return children;
+};
+
 const App = (props) => {
-  const navigate = useNavigate();
   const { authedUser } = props;
 
   useEffect(() => {
     props.dispatch(handleInitialData());
-    if (authedUser == null) {
-      navigate("/login");
-    }
   }, []);
 
   return (
@@ -31,10 +36,42 @@ const App = (props) => {
         {authedUser && <Navbar />}
         <Routes>
           <Route path="/login" exact element={<LoginPage />} />
-          <Route path="/" exact element={<Dashboard />} />
-          <Route path="/questions/:id" exact element={<PollPage />} />
-          <Route path="/add" exact element={<PollCreation />} />
-          <Route path="/leaderboard" exact element={<Leaderboard />} />
+          <Route
+            path="/"
+            exact
+            element={
+              <LoginRoute authedUser={props.authedUser}>
+                <Dashboard />
+              </LoginRoute>
+            }
+          />
+          <Route
+            path="/questions/:id"
+            exact
+            element={
+              <LoginRoute authedUser={props.authedUser}>
+                <PollPage />
+              </LoginRoute>
+            }
+          />
+          <Route
+            path="/add"
+            exact
+            element={
+              <LoginRoute authedUser={props.authedUser}>
+                <PollCreation />
+              </LoginRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            exact
+            element={
+              <LoginRoute authedUser={props.authedUser}>
+                <Leaderboard />
+              </LoginRoute>
+            }
+          />
           <Route path="*" exact element={<PageNotFound />} />
         </Routes>
       </div>

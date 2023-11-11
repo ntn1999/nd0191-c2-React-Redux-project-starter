@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 
 const Question = ({ question }) => {
-  console.log(question, "question");
   const dateTime = new Date(question.timestamp);
   const dateTimeFormat = moment(dateTime).format("hh:mm:A | MM/DD/YYYY");
 

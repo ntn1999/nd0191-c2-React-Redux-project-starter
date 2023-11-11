@@ -1,27 +1,29 @@
 import { connect } from "react-redux";
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { submitQuestionAnswer } from "../actions/questions";
 
-const PollPage = ({ questions, users, dispatch, authedUser }) => {
-  const { id } = useParams();
-  const question = Object.values(questions).find(
-    (question) => question.id === id
-  );
-  let initialOption;
-  if (question && question.optionOne.votes.includes(authedUser.id)) {
-    initialOption = "optionOne";
-  }
-  if (question && question.optionTwo.votes.includes(authedUser.id)) {
-    initialOption = "optionTwo";
-  }
+const withRouter = (Component) => {
+  const ComponentWithRouterProp = (props) => {
+    let location = useLocation();
+    let navigate = useNavigate();
+    let params = useParams();
+    return <Component {...props} router={{ location, navigate, params }} />;
+  };
+
+  return ComponentWithRouterProp;
+};
+
+const PollPage = ({ question, users, dispatch, initialOption }) => {
   const [optionSelected, setOptionSelected] = useState(initialOption);
 
   const navigate = useNavigate();
-  if (!question) {
-    navigate("/pagenotfound");
-    return;
-  }
+  if (!question) return <Navigate to="/pagenotfound" />;
 
   const avatarURL = users[question.author].avatarURL;
 
@@ -132,12 +134,25 @@ const PollPage = ({ questions, users, dispatch, authedUser }) => {
   );
 };
 
-const mapStateToProps = ({ questions, users, authedUser }) => {
+const mapStateToProps = ({ questions, users, authedUser }, props) => {
+  const { id } = props.router.params;
+  const question = Object.values(questions).find(
+    (question) => question.id === id
+  );
+  let initialOption;
+  if (question && question.optionOne.votes.includes(authedUser.id)) {
+    initialOption = "optionOne";
+  }
+  if (question && question.optionTwo.votes.includes(authedUser.id)) {
+    initialOption = "optionTwo";
+  }
+
   return {
     authedUser,
-    questions,
+    initialOption,
     users,
+    question,
   };
 };
 
-export default connect(mapStateToProps)(PollPage);
+export default withRouter(connect(mapStateToProps)(PollPage));

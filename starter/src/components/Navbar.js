@@ -1,18 +1,14 @@
 import { logout } from "../actions/authedUser";
 import { Link, useLocation } from "react-router-dom";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ dispatch, authedUser }) => {
-  const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
 
   const handleLogout = (e) => {
     e.preventDefault();
-
     dispatch(logout());
-    navigate("/login");
   };
   return (
     <nav class="d-flex justify-content-between border-bottom">
