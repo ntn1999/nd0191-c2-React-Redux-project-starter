@@ -33,7 +33,7 @@ const Dashboard = ({ authedUser, questions }) => {
         className="btn btn-outline-success mt-4"
         onClick={() => handleShowTabQuestion("done")}
       >
-        Done questions
+        Done
       </button>
 
       <div className={`collapse ${isNewQuestionShow === "new" ? "show" : ""}`}>
