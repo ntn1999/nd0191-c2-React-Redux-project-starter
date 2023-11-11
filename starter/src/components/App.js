@@ -24,6 +24,8 @@ const LoginRoute = ({ children, authedUser }) => {
 
 const App = (props) => {
   const { authedUser } = props;
+  const location = useLocation();
+  console.log(location.pathname, "aaaaaaaaaaaaa");
 
   useEffect(() => {
     props.dispatch(handleInitialData());
@@ -33,7 +35,7 @@ const App = (props) => {
     <Fragment>
       <LoadingBar />
       <div className="container">
-        {authedUser && <Navbar />}
+        {authedUser && location.pathname !== "/pagenotfound" && <Navbar />}
         <Routes>
           <Route path="/login" exact element={<LoginPage />} />
           <Route

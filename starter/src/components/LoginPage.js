@@ -1,19 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { login } from "../actions/authedUser";
 import { connect } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const LoginPage = ({ dispatch, authedUser }) => {
+const LoginPage = ({ dispatch }) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-
+  const { state } = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (authedUser !== null) {
-      navigate("/");
-    }
-  }, [authedUser]);
 
   const changeUsername = (e) => {
     const value = e.target.value;
@@ -31,6 +25,7 @@ const LoginPage = ({ dispatch, authedUser }) => {
       dispatch(login(username, password));
       setUsername("");
       setPassword("");
+      navigate(state?.from?.pathname || "/");
     }
   };
 
@@ -84,9 +79,4 @@ const LoginPage = ({ dispatch, authedUser }) => {
     </div>
   );
 };
-
-const mapStateToProps = ({ authedUser }) => ({
-  authedUser,
-});
-
-export default connect(mapStateToProps)(LoginPage);
+export default connect()(LoginPage);
