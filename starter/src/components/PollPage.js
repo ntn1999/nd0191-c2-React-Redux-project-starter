@@ -8,15 +8,15 @@ import {
 } from "react-router-dom";
 import { submitQuestionAnswer } from "../actions/questions";
 
-const withRouter = (Component) => {
-  const ComponentWithRouterProp = (props) => {
+const combineRoute = (Cmp) => {
+  const ComponentCombineRoute = (props) => {
+    let params = useParams();
     let location = useLocation();
     let navigate = useNavigate();
-    let params = useParams();
-    return <Component {...props} router={{ location, navigate, params }} />;
+    return <Cmp {...props} router={{ navigate, params, location }} />;
   };
 
-  return ComponentWithRouterProp;
+  return ComponentCombineRoute;
 };
 
 const PollPage = ({ question, users, dispatch, initialOption }) => {
@@ -155,4 +155,4 @@ const mapStateToProps = ({ questions, users, authedUser }, props) => {
   };
 };
 
-export default withRouter(connect(mapStateToProps)(PollPage));
+export default combineRoute(connect(mapStateToProps)(PollPage));
